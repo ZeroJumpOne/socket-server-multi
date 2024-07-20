@@ -2,8 +2,19 @@ import { Router, Request, Response } from 'express';
 import Server from '../classes/server';
 import UsuariosLista from '../classes/usuarios-lista';
 import { GraficaData } from '../classes/grafica';
+import { mapa } from '../sockets/sockets';
 
 export const router = Router();
+
+
+//mapa
+
+router.get('/mapa', (req: Request, res: Response) => {
+    res.json(mapa.marcadores);
+})
+
+
+// grafica
 
 const grafica = new GraficaData;
 

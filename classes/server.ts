@@ -68,6 +68,9 @@ export default class Server {
 
             //Desconectar
             socket.desconectar(client, this.io);
+
+            //mapas - marcador nuevo
+            socket.mapaSockets(client, this.io);
         });        
 
 

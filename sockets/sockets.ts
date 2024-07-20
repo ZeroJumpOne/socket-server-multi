@@ -2,9 +2,43 @@ import { Socket } from "socket.io";
 import socketIO from 'socket.io';
 import UsuariosLista from "../classes/usuarios-lista";
 import { Usuario } from "../classes/usuario";
+import { Mapa } from "../classes/mapa";
+import { Marcador } from "../classes/marcador";
 
 export const usuariosConectados = UsuariosLista.instance; //Patron singlenton, una sola instancia de la lista de usuarios.
+export const mapa = new Mapa();
 
+// eventos de mapa
+export const mapaSockets = ( cliente: Socket, io: socketIO.Server ) => {
+
+    cliente.on('marcador-nuevo', (marcador: Marcador) => {
+        mapa.agregarMarcador(marcador);
+
+        // se emite a todos excepto al que lo creo, por eso el broadcast
+        cliente.broadcast.emit('marcador-nuevo', marcador);
+    });
+
+
+    cliente.on('marcador-borrar', ( id: string ) => {
+        mapa.borrarMarcador( id );
+
+        // se emite a todos excepto al que lo creo, por eso el broadcast
+        cliente.broadcast.emit('marcador-borrar', id);
+    });
+
+    cliente.on('marcador-mover', (marcador: Marcador) => {
+        mapa.moverMarcador(marcador);
+        // console.log(marcador);
+
+        // se emite a todos excepto al que lo creo, por eso el broadcast
+        cliente.broadcast.emit('marcador-mover', marcador);
+    });
+
+
+}
+
+
+// eventos usuarios
 export const conectar = (client: Socket, io: socketIO) => {
 
     const usuario: Usuario = new Usuario( client.id );
