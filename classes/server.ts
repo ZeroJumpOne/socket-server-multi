@@ -23,7 +23,8 @@ export default class Server {
 
         this.httpServer = new http.Server( this.app );
 
-        this.io = socketIO( this.httpServer, { 
+        //this.io = socketIO( this.httpServer, { 
+        this.io = require("socket.io")( this.httpServer, { 
             cors: {
                 origin: "http://localhost:4200",
             }
@@ -79,8 +80,7 @@ export default class Server {
     start( callback: Function) {
     
         // this.app.listen( this.port, callback );
-        this.httpServer.listen( this.port, callback );
-    
+        this.httpServer.listen( this.port, callback );    
     }
 
 }

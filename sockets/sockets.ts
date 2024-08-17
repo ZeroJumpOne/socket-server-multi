@@ -39,7 +39,7 @@ export const mapaSockets = ( cliente: Socket, io: socketIO.Server ) => {
 
 
 // eventos usuarios
-export const conectar = (client: Socket, io: socketIO) => {
+export const conectar = (client: Socket, io: socketIO.Server) => {
 
     const usuario: Usuario = new Usuario( client.id );
     usuariosConectados.agregar( usuario );

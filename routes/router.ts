@@ -101,6 +101,7 @@ router.get('/usuarios', (req: Request, res: Response) => {
         });
     }
 });
+
 //Obtener usuarios y sus nombres
 router.get('/usuarios/detalle', (req: Request, res: Response) => {
 
@@ -122,11 +123,5 @@ router.get('/usuarios/detalle', (req: Request, res: Response) => {
 
 });
 
-
-
-
-
-
-});
 
 export default router;
