@@ -4,7 +4,6 @@ import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from '../sockets/sockets';
 
-
 export default class Server {
 
     private static _instance: Server;
@@ -40,8 +39,6 @@ export default class Server {
 
     }
 
-    
-
     private escucharSockets() {
         console.log('Escuchando conexiones - sockets');
 
@@ -72,6 +69,9 @@ export default class Server {
 
             //mapas - marcador nuevo
             socket.mapaSockets(client, this.io);
+
+            //colas
+            socket.colasSockets(client, this.io);
         });        
 
 

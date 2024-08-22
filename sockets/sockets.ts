@@ -4,9 +4,25 @@ import UsuariosLista from "../classes/usuarios-lista";
 import { Usuario } from "../classes/usuario";
 import { Mapa } from "../classes/mapa";
 import { Marcador } from "../classes/marcador";
+import { Colas } from "../classes/colas";
+import { Ticket } from "../interfaces/interfaces";
 
 export const usuariosConectados = UsuariosLista.instance; //Patron singlenton, una sola instancia de la lista de usuarios.
 export const mapa = new Mapa();
+export const cola = Colas.instance;
+
+
+// Manejo de colas
+export const colasSockets = ( client: Socket, io: socketIO.Server) => {
+
+    client.on('new-ticket', () => {
+        console.log('Creando ticket');   
+        const newTicket = cola.agregarTicket();
+        console.log(newTicket);        
+
+        io.to(client.id).emit('my-ticket', newTicket);
+    });
+}
 
 // eventos de mapa
 export const mapaSockets = ( cliente: Socket, io: socketIO.Server ) => {
@@ -43,15 +59,15 @@ export const conectar = (client: Socket, io: socketIO.Server) => {
 
     const usuario: Usuario = new Usuario( client.id );
     usuariosConectados.agregar( usuario );
+
+    io.to(client.id).emit('my-id', client.id);
 };
 
 export const desconectar = (cliente: Socket, io: socketIO.Server ) => {
 
     cliente.on('disconnect', () => {
         const tmp: Usuario | undefined = usuariosConectados.eliminar(cliente.id);
-        console.log(`Cliente desconectado ${ tmp!.id } [${ tmp!.nombre }]`);     
-        
-        io.emit('usuarios-activos', usuariosConectados.list);
+        console.log(`Cliente desconectado ${ tmp!.id } [${ tmp!.nombre }]`);
     });
 }
 
